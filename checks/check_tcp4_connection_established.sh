@@ -6,24 +6,18 @@ function check_tcp4_connection_established() {
     # $3 = destination IP
     # $4 = destination port
     # ——
-    echo "$#"
-    # Check inputs have been given
-    if [[ "$#" -ne 4 ]]; then
-      >&2 echo "Wrong number of arguments. Given '$#', expected 4: FAIL"
-      return 1
-    fi
     
     # Check that IPs are IPs
     if [[ "$1" == "ANY" ]]; then
       : # pass
     elif ! echo "$1" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
-      >&2 echo "Expected IPv4 address or 'ANY'. Given '$1': FAIL"
+      >&2 echo "Expected source IPv4 address or 'ANY'. Given '$1': FAIL"
       return 1
     fi
     if [[ "$3" == "ANY" ]]; then
       : # pass
     elif ! echo "$3" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
-      >&2 echo "Expected IPv4 address or 'ANY'. Given '$3': FAIL"
+      >&2 echo "Expected destination IPv4 address or 'ANY'. Given '$3': FAIL"
       return 1
     fi
     
@@ -31,13 +25,13 @@ function check_tcp4_connection_established() {
     if [[ "$2" == "ANY" ]]; then
       : # pass
     elif [[ "$2" -ge 1 ]] && [[ "$2" -le 65535 ]]; then
-      echo "Expected TCP port or 'ANY'. Given '$2': FAIL"
+      echo "Expected source TCP port or 'ANY'. Given '$2': FAIL"
       return 1
     fi
     if [[ "$4" == "ANY" ]]; then
       : # pass
     elif [[ "$4" -ge 1 ]] && [[ "$4" -le 65535 ]]; then
-      echo "Expected TCP port or 'ANY'. Given '$4': FAIL"
+      echo "Expected destination TCP port or 'ANY'. Given '$4': FAIL"
       return 1
     fi
     
