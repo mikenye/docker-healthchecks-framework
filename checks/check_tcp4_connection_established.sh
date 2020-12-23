@@ -18,7 +18,7 @@ function check_tcp4_connection_established() {
     # Check source port input
     if [[ "$2" == "ANY" ]]; then
       : # pass
-    elif [[ "$2" -ge 1 ]] || [[ "$2" -le 65535 ]]; then
+    elif [[ "$2" -lt 1 ]] || [[ "$2" -gt 65535 ]]; then
       echo "Expected source TCP port or 'ANY'. Given '$2': FAIL"
       return 1
     fi
@@ -34,7 +34,7 @@ function check_tcp4_connection_established() {
     # Check destination port input
     if [[ "$4" == "ANY" ]]; then
       : # pass
-    elif [[ "$4" -ge 1 ]] || [[ "$4" -le 65535 ]]; then
+    elif [[ "$4" -lt 1 ]] || [[ "$4" -gt 65535 ]]; then
       echo "Expected destination TCP port or 'ANY'. Given '$4': FAIL"
       return 1
     fi
