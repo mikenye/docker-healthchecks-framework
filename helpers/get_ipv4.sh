@@ -10,33 +10,44 @@ function get_ipv4() {
         >&2 echo "DEBUG: Already IP"
       fi
     else
-      if IP=$(dig +short "$1" 2> /dev/null); then
-        :
-        if [[ -n "$VERBOSE_LOGGING" ]]; then
+      
+      # Attempt to resolve $1 into an IP address with dig
+      if which dig > /dev/null 2>&1; then
+        if IP=$(dig +short "$1" 2> /dev/null); then
+          if [[ -n "$VERBOSE_LOGGING" ]]; then
             >&2 echo "DEBUG: Got IP via dig"
+          fi
+          echo "$IP"
+          return 0
         fi
-        
-      elif IP=$(busybox nslookup "$1." | grep -A999 -m1 'Non-authoritative answer:' | grep 'Address:' | cut -d ' ' -f 2 | grep -P '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$' 2> /dev/null); then
-        :
-        if [[ -n "$VERBOSE_LOGGING" ]]; then
-            >&2 echo "DEBUG: Got IP via busybox nslookup"
-        fi
-    
-      # Attempt to resolve $1 into an IP address with s6-dnsip4
-      elif IP=$(s6-dnsip4 "$1" 2> /dev/null); then
-        :
-        if [[ -n "$VERBOSE_LOGGING" ]]; then
-            >&2 echo "DEBUG: Got IP via s6-dnsip4"
-        fi
-        
-      # Catch-all (maybe we were given an IP...)
-      else
-        >&2 echo "DEBUG: No IPv4 address found"
-        return 1
       fi
       
-      # Return the IP address
-      echo "$IP"
+      # Attempt to resolve $1 into an IP address with busybox nslookup
+      if which busybox > /dev/null 2>&1; then
+        if IP=$(busybox nslookup "$1." | grep -A999 -m1 'Non-authoritative answer:' | grep 'Address:' | cut -d ' ' -f 2 | grep -P '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$' 2> /dev/null); then
+          if [[ -n "$VERBOSE_LOGGING" ]]; then
+            >&2 echo "DEBUG: Got IP via busybox nslookup"
+          fi
+          echo "$IP"
+          return 0
+        fi
+      fi
+    
+      # Attempt to resolve $1 into an IP address with s6-dnsip4
+      if which s6-dnsip4 > /dev/null 2>&1; then
+        if IP=$(s6-dnsip4 "$1" 2> /dev/null); then
+          if [[ -n "$VERBOSE_LOGGING" ]]; then
+            >&2 echo "DEBUG: Got IP via s6-dnsip4"
+          fi
+          echo "$IP"
+          return 0
+        fi
+      fi
+        
+      # Catch-all (maybe we were given an IP...)
+      >&2 echo "DEBUG: No IPv4 address found"
+      return 1
+      
     fi
   else
     >&2 echo "Expected a hostname or IPv4 address."
