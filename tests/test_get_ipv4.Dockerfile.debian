@@ -9,12 +9,12 @@ RUN set -x && \
 
 # Test with busybox
 RUN apt-get install --no-install-recommends -y busybox
-RUN /workdir/helpers/get_ipv4.sh dns.google | head -1 | grep -P '^8\.8\.(8|4)\.(8|4)$'
+RUN bash -x /workdir/helpers/get_ipv4.sh dns.google | head -1 | grep -P '^8\.8\.(8|4)\.(8|4)$'
 RUN apt-get remove -y busybox
 
 # Test with dig
 RUN apt-get install --no-install-recommends -y dnsutils
-RUN /workdir/helpers/get_ipv4.sh dns.google | head -1 | grep -P '^8\.8\.(8|4)\.(8|4)$'
+RUN bash -x /workdir/helpers/get_ipv4.sh dns.google | head -1 | grep -P '^8\.8\.(8|4)\.(8|4)$'
 RUN apt-get remove -y dnsutils
 
 # Test with s6-overlay
@@ -25,4 +25,4 @@ RUN apt-get install --no-install-recommends -y \
       gnupg \
       && \
     curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh
-RUN /workdir/helpers/get_ipv4.sh dns.google | head -1 | grep -P '^8\.8\.(8|4)\.(8|4)$'
+RUN bash -x /workdir/helpers/get_ipv4.sh dns.google | head -1 | grep -P '^8\.8\.(8|4)\.(8|4)$'
