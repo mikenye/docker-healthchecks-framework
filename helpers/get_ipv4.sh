@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 function get_ipv4() {
-    # $1 = IP(v4) address or hostname
-    # -----
+  # $1 = IP(v4) address or hostname
+  # -----
+  if [[ -n "$1" ]]; then
     if IP=$(echo "$1" | grep -P '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$' 2> /dev/null); then
       :
       if [[ -n "$VERBOSE_LOGGING" ]]; then
@@ -37,6 +38,10 @@ function get_ipv4() {
       # Return the IP address
       echo "$IP"
     fi
+  else
+    >&2 echo "Expected a hostname or IPv4 address."
+    return 1
+  fi
 }
 
 # If the script is called directly, run the function
