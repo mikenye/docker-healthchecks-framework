@@ -81,6 +81,6 @@ function check_tcp4_connection_established() {
 }
 
 # If the script is called directly, run the function
-if [[ "${#BASH_SOURCE[@]}" -eq 1 ]]; then
-    check_tcp4_connection_established "$1" "$2" "$3" "$4"
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  check_tcp4_connection_established "$1" "$2" "$3" "$4"
 fi
