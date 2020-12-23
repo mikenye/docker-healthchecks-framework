@@ -68,10 +68,10 @@ function check_tcp4_connection_established() {
     fi
     
     # Prepare the remainder of the regex including the IP and port
-    regex=“^tcp\s+\d+\s+\d+\s+${regex_src_ip}:${regex_src_port}\s+${regex_dst_ip}:${regex_dst_port}\s+ESTABLISHED$”
+    regex="^tcp\s+\d+\s+\d+\s+${regex_src_ip}:${regex_src_port}\s+${regex_dst_ip}:${regex_dst_port}\s+ESTABLISHED$"
     
     # Check to see if the connection is established
-    if netstat -an | grep -P “$regex” > /dev/null 2>&1; then
+    if netstat -an | grep -P "$regex" > /dev/null 2>&1; then
       >&2 echo "Connection from $1:$2 to $3:$4 established: PASS"
       true
     else
