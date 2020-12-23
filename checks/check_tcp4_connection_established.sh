@@ -7,6 +7,40 @@ function check_tcp4_connection_established() {
     # $4 = destination port
     # ——
     
+    # Check inputs have been given
+    if [[ "$#" -ne 4 ]]; then
+      >&2 echo "Wrong number of arguments. Given $#, expected 4: FAIL"
+      return 1
+    fi
+    
+    # Check that IPs are IPs
+    if [[ "$1" == "ANY" ]]; then
+      : # pass
+    elif ! echo "$1" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
+      >&2 echo "Expected IPv4 address or 'ANY'. Given $1: FAIL"
+      return 1
+    fi
+    if [[ "$3" == "ANY" ]]; then
+      : # pass
+    elif ! echo "$3" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
+      >&2 echo "Expected IPv4 address or 'ANY'. Given $3: FAIL"
+      return 1
+    fi
+    
+    # Check ports are ports
+    if [[ "$2" == "ANY" ]]; then
+      : # pass
+    elif [[ "$2" -ge 1 ]] && [[ "$2" -le 65535 ]]; then
+      echo "Expected TCP port or 'ANY'. Given $2: FAIL"
+      return 1
+    fi
+    if [[ "$4" == "ANY" ]]; then
+      : # pass
+    elif [[ "$4" -ge 1 ]] && [[ "$4" -le 65535 ]]; then
+      echo "Expected TCP port or 'ANY'. Given $4: FAIL"
+      return 1
+    fi
+    
     # Prepare the part of the regex pattern that has the source IP
     if [[ "$1" == "ANY" ]]; then
       regex_src_ip="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
