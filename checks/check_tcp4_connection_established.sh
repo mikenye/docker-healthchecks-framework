@@ -6,7 +6,7 @@ function check_tcp4_connection_established() {
     # $3 = destination IP
     # $4 = destination port
     # ——
-    
+    echo "$#"
     # Check inputs have been given
     if [[ "$#" -ne 4 ]]; then
       >&2 echo "Wrong number of arguments. Given '$#', expected 4: FAIL"
