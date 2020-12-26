@@ -6,6 +6,8 @@ COPY / /workdir/
 
 RUN set -x && \
     apt-get update && \
-    apt-get install -y ncat
+    apt-get install -y \
+      ncat \
+      net-tools
     
 ENTRYPOINT [ "nc", "-vv", "redis", "6379" ]
