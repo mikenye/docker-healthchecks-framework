@@ -8,7 +8,8 @@ on:
       - main
 
 jobs:
-  tests:
+
+  test_helpers_get_ipv4:
     name: Test helpers/get_ipv4.sh
     runs-on: ubuntu-latest
     steps:
@@ -23,3 +24,31 @@ jobs:
           file: ./tests/test_get_ipv4.Dockerfile.debian
           no-cache: true
           push: false
+          
+  test_checks_check_tcp4_connection_established:
+    name: Test checks/check_tcp4_connection_established.sh
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+        - 6379/tcp
+        options: --entrypoint redis-server
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Build test image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./tests/test_check_tcp4_connection_established.Dockerfile.debian
+          no-cache: true
+          push: false
+          tags: test_check_tcp4_connection_established
+      -
+        name: Run test
+        run: |
+          docker run --rm -it test_check_tcp4_connection_established
+          docker exec -it bash -x /workdir/checks/check_tcp4_connection_established.sh
