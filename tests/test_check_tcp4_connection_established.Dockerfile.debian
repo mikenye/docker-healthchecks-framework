@@ -1,0 +1,11 @@
+FROM debian:stable-slim
+
+ENV VERBOSE_LOGGING=true
+
+COPY / /workdir/
+
+RUN set -x && \
+    apt-get update && \
+    apt-get install -y ncat
+    
+ENTRYPOINT [ "nc", "-vv", "redis", "6379" ]
