@@ -47,7 +47,7 @@ jobs:
           docker network create testnet
           docker run --rm -d -i --name redis --network testnet --entrypoint redis-server redis
           docker run --rm -d -i --name test_check_tcp4_connection_established --network testnet test_check_tcp4_connection_established
-          docker exec -i bash -x /workdir/checks/check_tcp4_connection_established.sh
+          docker exec -i test_check_tcp4_connection_established bash -x /workdir/checks/check_tcp4_connection_established.sh
           docker kill test_check_tcp4_connection_established
           docker kill redis
           
