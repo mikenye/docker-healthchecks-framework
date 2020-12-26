@@ -28,12 +28,6 @@ jobs:
   test_checks_check_tcp4_connection_established:
     name: Test checks/check_tcp4_connection_established.sh
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis
-        ports:
-        - 6379/tcp
-        options: --entrypoint redis-server
     steps:
       -
         name: Checkout
@@ -50,5 +44,7 @@ jobs:
       -
         name: Run test
         run: |
-          docker run --rm -i test_check_tcp4_connection_established
+          docker network create testnet
+          docker run --rm -i --network testnet --entrypoint redit-server redit
+          docker run --rm -i --network testnet test_check_tcp4_connection_established
           docker exec -i bash -x /workdir/checks/check_tcp4_connection_established.sh
