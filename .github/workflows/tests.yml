@@ -50,5 +50,5 @@ jobs:
       -
         name: Run test
         run: |
-          docker run --rm -it test_check_tcp4_connection_established
-          docker exec -it bash -x /workdir/checks/check_tcp4_connection_established.sh
+          docker run --rm -i test_check_tcp4_connection_established
+          docker exec -i bash -x /workdir/checks/check_tcp4_connection_established.sh
