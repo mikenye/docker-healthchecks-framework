@@ -140,6 +140,84 @@ test_dig_stdout() {
   
 }
 
+test_busybox_stderr() {
+
+  set -x
+
+  # Save the place that stdout (1) points to.
+  exec 3>&1
+
+  # Run command.  stderr is captured.
+  output=$(docker exec -i testclient_busybox /workdir/helpers/get_ipv4.sh testserver 2>&1 1>&3)
+
+  # Close FD #3.
+  exec 3>&-
+
+  set +x
+  
+  # connection that does exist
+  assertEquals \
+    'use busybox nslookup if present' \
+    "$output" \
+    'DEBUG: Got IP via busybox nslookup'
+  
+}
+
+test_busybox_stdout() {
+
+  set -x
+
+  output=$(docker exec -i testclient_busybox /workdir/helpers/get_ipv4.sh testserver)
+
+  set +x
+  
+  # connection that does exist
+  assertEquals \
+    'testserver resolves to 172.28.3.10' \
+    "$output" \
+    '172.28.3.10'
+  
+}
+
+test_s6_stderr() {
+
+  set -x
+
+  # Save the place that stdout (1) points to.
+  exec 3>&1
+
+  # Run command.  stderr is captured.
+  output=$(docker exec -i testclient_s6 /workdir/helpers/get_ipv4.sh testserver 2>&1 1>&3)
+
+  # Close FD #3.
+  exec 3>&-
+
+  set +x
+  
+  # connection that does exist
+  assertEquals \
+    'use s6-dnsip4 if present' \
+    "$output" \
+    'DEBUG: Got IP via s6-dnsip4'
+  
+}
+
+test_s6_stdout() {
+
+  set -x
+
+  output=$(docker exec -i testclient_s6 /workdir/helpers/get_ipv4.sh testserver)
+
+  set +x
+  
+  # connection that does exist
+  assertEquals \
+    'testserver resolves to 172.28.3.10' \
+    "$output" \
+    '172.28.3.10'
+  
+}
+
 oneTimeTearDown() {
   set -x
   # clean up
