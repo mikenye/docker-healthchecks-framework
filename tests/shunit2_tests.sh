@@ -6,18 +6,14 @@ oneTimeSetUp() {
   docker build \
     -t testimage \
     -f ./tests/Dockerfile.testimage.debian \
-    . > /dev/null 2>&1
-  
-}
-
-test_check_tcp4_connection_established() {
-
+    .
+    
   # set up network for testing
   docker network create \
     --subnet=172.28.0.0/16 \
     --ip-range=172.28.5.0/24 \
     --gateway=172.28.5.254 \
-    testnet > /dev/null 2>&1
+    testnet
   
   # set up server container for test
   docker run \
@@ -28,7 +24,7 @@ test_check_tcp4_connection_established() {
     --network=testnet \
     --ip="172.28.3.10" \
     --entrypoint redis-server \
-    redis > /dev/null 2>&1
+    redis
   
   # set up client container for test
   docker run \
@@ -38,49 +34,50 @@ test_check_tcp4_connection_established() {
     --name=testclient \
     --network=testnet \
     --ip="172.28.4.10" \
-    testimage > /dev/null 2>&1
+    testimage
     
   # install prerequisites on client
   docker exec \
     -i \
     testclient \
-      apt-get update > /dev/null 2>&1
+      apt-get update
   docker exec \
     -i \
     testclient \
       apt-get install -y --no-install-recommends \
       ncat \
-      net-tools > /dev/null 2>&1
+      net-tools
   
-  # before making connection
-  assertFalse \
-    'before making connection' \
-    'docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379'
-    
   # make a connection
   docker exec \
     -i \
     -d \
     testclient \
-    nc testserver 6379 > /dev/null 2>&1
-    
-  # netstat output
-  docker exec \
-    -i \
-    -d \
-    testclient \
-    netstat -an
+    nc testserver 6379
   
-  # after making connection
+}
+
+test_check_tcp4_connection_established() {
+
+  # connection that doesn't exist
+  assertFalse \
+    "connection that doesn't exist" \
+    'docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380'
+  
+  # connection that does exist
   assertTrue \
-    'after making connection' \
+    'connection that does exist' \
     'docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379'
-    
-  # clean up
-  docker kill testclient > /dev/null 2>&1
-  docker kill testserver > /dev/null 2>&1
-  docker network rm testnet > /dev/null 2>&1
   
+}
+
+oneTimeTearDown() {
+
+  # clean up
+  docker kill testclient
+  docker kill testserver
+  docker network rm testnet
+
 }
 
 # Load shUnit2.
