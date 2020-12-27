@@ -17,7 +17,7 @@ test_check_tcp4_connection_established() {
     --subnet=172.28.0.0/16 \
     --ip-range=172.28.5.0/24 \
     --gateway=172.28.5.254 \
-    testnet
+    testnet > /dev/null 2>&1
   
   # set up server container for test
   docker run \
@@ -28,7 +28,7 @@ test_check_tcp4_connection_established() {
     --network=testnet \
     --ip="172.28.3.10" \
     --entrypoint redis-server \
-    redis
+    redis > /dev/null 2>&1
   
   # set up client container for test
   docker run \
@@ -38,7 +38,17 @@ test_check_tcp4_connection_established() {
     --name=testclient \
     --network=testnet \
     --ip="172.28.4.10" \
-    testimage
+    testimage > /dev/null 2>&1
+    
+  # install prerequisites on client
+  docker exec \
+    -i \
+    apt-get update
+  docker exec \
+    -i \
+    apt-get install -y --no-install-recommends \
+      ncat \
+      net-tools
   
   # before making connection
   assertFalse \
@@ -50,7 +60,7 @@ test_check_tcp4_connection_established() {
     -i \
     -d \
     testclient \
-    nc -vv testserver 6379
+    nc testserver 6379 > /dev/null 2>&1
   
   # after making connection
   assertTrue \
@@ -58,9 +68,9 @@ test_check_tcp4_connection_established() {
     'docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379'
     
   # clean up
-  docker kill testclient
-  docker kill testserver
-  docker network rm testnet
+  docker kill testclient > /dev/null 2>&1
+  docker kill testserver > /dev/null 2>&1
+  docker network rm testnet > /dev/null 2>&1
   
 }
 
