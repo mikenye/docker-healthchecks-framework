@@ -2,12 +2,17 @@ FROM debian:stable-slim
 
 ENV VERBOSE_LOGGING=true
 
+SHELL [“/bin/bash”, “-o”, “pipefail”, “-c”]
+
 COPY / /workdir/
 
 RUN set -x && \
     apt-get update && \
-    apt-get install -y \
+    apt-get install —-no-install-recommends -y \
       ncat \
-      net-tools
+      net-tools \
+      && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
     
 ENTRYPOINT [ "nc", "-vv", "redis", "6379" ]
