@@ -17,7 +17,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       - 
-        name: run my tests
+        name: Run tests
         uses: sudo-bot/action-shunit2@latest
         with:
           cli: "./tests/shunit2_tests.sh"

@@ -63,3 +63,6 @@ test_check_tcp4_connection_established() {
   docker network rm testnet
   
 }
+
+# Load shUnit2.
+. ./shunit2
