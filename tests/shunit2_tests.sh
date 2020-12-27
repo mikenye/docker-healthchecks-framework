@@ -54,6 +54,7 @@ oneTimeSetUp() {
     -d \
     testclient \
     nc testserver 6379
+  sleep 3
   
 }
 
