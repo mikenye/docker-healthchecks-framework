@@ -65,4 +65,4 @@ test_check_tcp4_connection_established() {
 }
 
 # Load shUnit2.
-. /usr/bin/shunit2
+. /opt/shunit2/shunit2
