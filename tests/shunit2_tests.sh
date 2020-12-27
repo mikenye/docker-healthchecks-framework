@@ -54,7 +54,7 @@ oneTimeSetUp() {
   docker exec \
     -d \
     testclient \
-    nc testserver 6379
+    nc -4 --no-shutdown testserver 6379
     
   sleep 3
   
