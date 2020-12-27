@@ -63,14 +63,3 @@ test_check_tcp4_connection_established() {
   docker network rm testnet
   
 }
-
-
-
-
-
-         
-          docker run --rm -d -i --name test_check_tcp4_connection_established --network=testnet --ip="172.28.4.10" test_check_tcp4_connection_established
-          docker exec -i test_check_tcp4_connection_established netstat -an
-          docker exec -i test_check_tcp4_connection_established bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379
-          docker kill test_check_tcp4_connection_established
-          docker kill redis
