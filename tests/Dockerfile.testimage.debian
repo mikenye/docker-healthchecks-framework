@@ -1,0 +1,9 @@
+FROM debian:stable-slim
+
+ENV VERBOSE_LOGGING=true
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+COPY / /workdir/
+    
+ENTRYPOINT [ "sleep", "86400" ]

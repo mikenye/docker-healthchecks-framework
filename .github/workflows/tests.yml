@@ -9,46 +9,22 @@ on:
 
 jobs:
 
-  test_helpers_get_ipv4:
-    name: Test helpers/get_ipv4.sh
+  shunit2_tests:
+    name: shUnit2 test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-script:
+          - tests/test_check_tcp4_connection_established.sh
+          - tests/test_get_ipv4.sh
+    
     steps:
-      -
+      - 
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Run Test
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./tests/test_get_ipv4.Dockerfile.debian
-          no-cache: true
-          push: false
-          
-  test_checks_check_tcp4_connection_established:
-    name: Test checks/check_tcp4_connection_established.sh
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        name: Build test image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./tests/test_check_tcp4_connection_established.Dockerfile.debian
-          no-cache: true
-          push: false
-          tags: test_check_tcp4_connection_established
-      -
-        name: Run test
-        run: |
-          docker network create --subnet=172.28.0.0/16 --ip-range=172.28.5.0/24 --gateway=172.28.5.254 testnet
-          docker run --rm -d -i --name redis --network testnet --ip="172.28.3.10" --entrypoint redis-server redis
-          docker run --rm -d -i --name test_check_tcp4_connection_established --network=testnet --ip="172.28.4.10" test_check_tcp4_connection_established
-          docker exec -i test_check_tcp4_connection_established netstat -an
-          docker exec -i test_check_tcp4_connection_established bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379
-          docker kill test_check_tcp4_connection_established
-          docker kill redis
-          
+        name: Install shUnit2
+        run: git clone -b v2.1.8 https://github.com/kward/shunit2.git /opt/shunit2
+      - 
+        name: Run ${{ matrix.test-script }}
+        run: ./${{ matrix.test-script }}
