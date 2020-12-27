@@ -72,17 +72,39 @@ oneTimeSetUp() {
   set +x
 }
 
-test_check_tcp4_connection_established() {
+test_pass() {
 
   set -x
 
   # Save the place that stdout (1) points to.
   exec 3>&1
 
-  # Run commands.  stderr is captured.
-  output_fail=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380 2>&1 1>&3)
+  # Run command.  stderr is captured.
   output_pass=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379 2>&1 1>&3)
 
+  # Close FD #3.
+  exec 3>&-
+
+  set +x
+  
+  # connection that does exist
+  assertContains \
+    'connection that does exist' \
+    "$output_pass" \
+    'PASS'
+  
+}
+
+test_fail() {
+
+  set -x
+
+  # Save the place that stdout (1) points to.
+  exec 3>&1
+
+  # Run command.  stderr is captured.
+  output_fail=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380 2>&1 1>&3)
+  
   # Close FD #3.
   exec 3>&-
 
@@ -93,13 +115,7 @@ test_check_tcp4_connection_established() {
     "connection that doesn't exist" \
     "$output_fail" \
     'FAIL'
-  
-  # connection that does exist
-  assertContains \
-    'connection that does exist' \
-    "$output_pass" \
-    'PASS'
-  
+    
 }
 
 oneTimeTearDown() {

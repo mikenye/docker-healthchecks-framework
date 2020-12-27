@@ -12,6 +12,11 @@ jobs:
   shunit2_tests:
     name: Run shUnit2 tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-script:
+          - tests/test_check_tcp4_connection_established.sh
+    
     steps:
       - 
         name: Checkout
@@ -20,8 +25,8 @@ jobs:
         name: Install shUnit2
         run: git clone -b v2.1.8 https://github.com/kward/shunit2.git /opt/shunit2
       - 
-        name: Run tests
-        run: ./tests/shunit2_tests.sh
+        name: Run ${{ matrix.test-script }}
+        run: ./${{ matrix.test-script }}
 
   test_helpers_get_ipv4:
     name: Test helpers/get_ipv4.sh
