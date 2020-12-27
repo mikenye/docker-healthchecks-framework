@@ -62,14 +62,16 @@ oneTimeSetUp() {
 test_check_tcp4_connection_established() {
 
   # connection that doesn't exist
-  assertFalse \
+  assertContains \
     "connection that doesn't exist" \
-    'docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380'
+    "$(docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380)" \
+    'FAIL'
   
   # connection that does exist
-  assertTrue \
+  assertContains \
     'connection that does exist' \
-    'docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379'
+    "$(docker exec -i testclient bash -x /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379)" \
+    'PASS'
   
 }
 
