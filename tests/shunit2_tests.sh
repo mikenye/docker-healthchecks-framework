@@ -47,16 +47,21 @@ oneTimeSetUp() {
     testclient \
       apt-get install -y --no-install-recommends \
       ncat \
-      net-tools
+      net-tools \
+      procps
   
   # make a connection
   docker exec \
-    -i \
     -d \
     testclient \
     nc testserver 6379
     
   sleep 3
+  
+  docker exec \
+    -i \
+    testclient \
+    ps ax
   
   # show connections
   docker exec \
@@ -69,19 +74,19 @@ oneTimeSetUp() {
 
 test_check_tcp4_connection_established() {
 
-set -x
+  set -x
 
-# Save the place that stdout (1) points to.
-exec 3>&1
+  # Save the place that stdout (1) points to.
+  exec 3>&1
 
-# Run commands.  stderr is captured.
-output_fail=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380 2>&1 1>&3)
-output_pass=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379 2>&1 1>&3)
+  # Run commands.  stderr is captured.
+  output_fail=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380 2>&1 1>&3)
+  output_pass=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379 2>&1 1>&3)
 
-# Close FD #3.
-exec 3>&-
+  # Close FD #3.
+  exec 3>&-
 
-set +x
+  set +x
 
   # connection that doesn't exist
   assertContains \
