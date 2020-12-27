@@ -59,7 +59,7 @@ function check_tcp4_connection_established() {
       regex_dst_ip="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
     else
       # regex_dst_ip=$(echo "$3" | sed 's/\./\\./g')
-      regex_src_ip=${3//\./\\.}
+      regex_dst_ip=${3//\./\\.}
     fi
     
     # Prepare the part of the regex pattern that has the destination port
