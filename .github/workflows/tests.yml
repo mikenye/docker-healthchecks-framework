@@ -12,13 +12,15 @@ jobs:
   shunit2_tests:
     name: Run shunit2 tests
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - 
-          name: run my tests
-          uses: sudo-bot/action-shunit2@latest
-          with:
-            cli: "./tests/shunit2_tests.sh"
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: run my tests
+        uses: sudo-bot/action-shunit2@latest
+        with:
+          cli: "./tests/shunit2_tests.sh"
 
   test_helpers_get_ipv4:
     name: Test helpers/get_ipv4.sh
