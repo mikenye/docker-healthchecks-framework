@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 oneTimeSetUp() {
+  set -x
   
   # build base test image
   docker build \
@@ -55,7 +56,7 @@ oneTimeSetUp() {
     testclient \
     nc testserver 6379
   sleep 3
-  
+  set +x
 }
 
 test_check_tcp4_connection_established() {
@@ -73,12 +74,12 @@ test_check_tcp4_connection_established() {
 }
 
 oneTimeTearDown() {
-
+  set -x
   # clean up
   docker kill testclient
   docker kill testserver
   docker network rm testnet
-
+  set +x
 }
 
 # Load shUnit2.
