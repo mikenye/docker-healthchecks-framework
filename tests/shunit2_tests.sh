@@ -57,7 +57,13 @@ oneTimeSetUp() {
     nc testserver 6379
     
   sleep 3
-  netstat -an
+  
+  # show connections
+  docker exec \
+    -i \
+    -d \
+    testclient \
+    netstat -an
   
   set +x
 }
