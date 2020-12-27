@@ -43,7 +43,8 @@ function check_tcp4_connection_established() {
     if [[ "$1" == "ANY" ]]; then
       regex_src_ip="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
     else
-      regex_src_ip=$(echo "$1" | sed 's/\./\\./g')
+      # regex_src_ip=$(echo "$1" | sed 's/\./\\./g')
+      regex_src_ip=${1//\./\\.}
     fi
     
     # Prepare the part of the regex pattern that has the source port
@@ -57,7 +58,8 @@ function check_tcp4_connection_established() {
     if [[ "$3" == "ANY" ]]; then
       regex_dst_ip="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
     else
-      regex_dst_ip=$(echo "$3" | sed 's/\./\\./g')
+      # regex_dst_ip=$(echo "$3" | sed 's/\./\\./g')
+      regex_src_ip=${3//\./\\.}
     fi
     
     # Prepare the part of the regex pattern that has the destination port
