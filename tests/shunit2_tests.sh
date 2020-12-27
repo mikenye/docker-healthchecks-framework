@@ -6,7 +6,7 @@ oneTimeSetUp() {
   docker build \
     -t testimage \
     -f ./tests/Dockerfile.testimage.debian \
-    .
+    . > /dev/null 2>&1
   
 }
 
@@ -43,12 +43,14 @@ test_check_tcp4_connection_established() {
   # install prerequisites on client
   docker exec \
     -i \
-    apt-get update
+    testclient \
+      apt-get update > /dev/null 2>&1
   docker exec \
     -i \
-    apt-get install -y --no-install-recommends \
+    testclient \
+      apt-get install -y --no-install-recommends \
       ncat \
-      net-tools
+      net-tools > /dev/null 2>&1
   
   # before making connection
   assertFalse \
