@@ -63,6 +63,13 @@ test_check_tcp4_connection_established() {
     -d \
     testclient \
     nc testserver 6379 > /dev/null 2>&1
+    
+  # netstat output
+  docker exec \
+    -i \
+    -d \
+    testclient \
+    netstat -an
   
   # after making connection
   assertTrue \
