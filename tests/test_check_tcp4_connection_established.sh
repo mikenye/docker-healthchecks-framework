@@ -72,6 +72,19 @@ oneTimeSetUp() {
   set +x
 }
 
+test_function_sourced_ok() {
+   
+   # source the healthchecks functions
+   . ./healthchecks.sh
+   
+   # ensure this function is available
+   assertContains \
+     "ensure the function can be sourced via healthchecks.sh" \
+     "$(declare -F)" \
+     "declare -f check_tcp4_connection_established"
+
+}
+
 test_pass() {
 
   set -x
