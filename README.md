@@ -1,5 +1,23 @@
 # mikenye/docker-healthchecks-framework
 
+## Adding to your image
+
+Clone the repository, and if desired delete files/directories not required, as-per the example below.
+
+```shell
+    # Deploy healthchecks framework
+    git clone \
+      --depth=1 \
+      https://github.com/mikenye/docker-healthchecks-framework.git \
+      /opt/healthchecks-framework \
+      && \
+    rm -rf \
+      /opt/healthchecks-framework/.git* \
+      /opt/healthchecks-framework/*.md \
+      /opt/healthchecks-framework/tests \
+      && \
+```
+
 ## Checks
 
 ### `check_tcp4_connection_established`
