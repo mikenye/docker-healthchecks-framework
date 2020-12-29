@@ -74,7 +74,7 @@ function check_tcp4_connection_established() {
     fi
     
     # Prepare the remainder of the regex including the IP and port
-    regex="^tcp\s+\d+\s+\d+\s+${regex_local_ip}:${regex_local_port}\s+${regex_remote_ip}:${regex_remote_port}\s+ESTABLISHED$"
+    regex="^tcp\s+\d+\s+\d+\s+${regex_local_ip}:${regex_local_port}\s+${regex_remote_ip}:${regex_remote_port}\s+ESTABLISHED\s*$"
     
     # Check to see if the connection is established
     if netstat -an | grep -P "$regex" > /dev/null 2>&1; then
