@@ -34,14 +34,14 @@ function check_tcp4_socket_listening() {
     fi
     
     # Prepare the part of the regex pattern that has the local port
-    if [[ "$2" == "ANY" ]]; then
+    if [[ "$2" == "ANY" ]]; then  
       regex_local_port="${regex_any_port}"
     else
       regex_local_port="$2"
     fi
     
     # Prepare the remainder of the regex including the IP and port
-    regex="^tcp\s+\d+\s+\d+\s+${regex_local_ip}:${regex_local_port}\s+${regex_any_ip_v4or6}:\*\s+LISTEN\s*$"
+    regex="^tcp6?\s+\d+\s+\d+\s+${regex_local_ip}:${regex_local_port}\s+${regex_any_ip_v4or6}:\*\s+LISTEN\s*$"
     
     # Check to see if the connection is established
     if netstat -an | grep -P "$regex" > /dev/null 2>&1; then
