@@ -101,6 +101,19 @@ oneTimeSetUp() {
   set +x
 }
 
+test_function_sourced_ok() {
+   
+   # source the healthchecks functions
+   . ./healthchecks.sh
+   
+   # ensure this function is available
+   assertContains \
+     "ensure the function can be sourced via healthchecks.sh" \
+     "$(declare -F)" \
+     "declare -f get_ipv4"
+
+}
+
 test_dig_stderr() {
 
   set -x
