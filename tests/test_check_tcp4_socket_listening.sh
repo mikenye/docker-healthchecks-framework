@@ -8,65 +8,53 @@ oneTimeSetUp() {
     -t testimage \
     -f ./tests/Dockerfile.testimage.debian \
     .
-    
-  # set up network for testing
-  docker network create \
-    --subnet=172.28.0.0/16 \
-    --ip-range=172.28.5.0/24 \
-    --gateway=172.28.5.254 \
-    testnet
   
-  # set up server container for test
+  # set up client container for test that should pass
   docker run \
     --rm \
     -i \
     -d \
-    --name=testserver \
-    --network=testnet \
-    --ip="172.28.3.10" \
-    --entrypoint redis-server \
-    redis
+    --name=testcontainer_pass \
+    testimage
   
-  # set up client container for test
+  # set up client container for test that should fail
   docker run \
     --rm \
     -i \
     -d \
-    --name=testclient \
-    --network=testnet \
-    --ip="172.28.4.10" \
+    --name=testcontainer_fail \
     testimage
     
   # install prerequisites on client
   docker exec \
     -i \
-    testclient \
+    testcontainer_pass \
       apt-get update
   docker exec \
     -i \
-    testclient \
+    testcontainer_pass \
       apt-get install -y --no-install-recommends \
-      ncat \
       net-tools \
+      nginx \
       procps
   
-  # make a connection
+  # start service
   docker exec \
     -d \
-    testclient \
-    nc -4 --no-shutdown testserver 6379
+    testcontainer_pass \
+    nginx
     
   sleep 3
   
   docker exec \
     -i \
-    testclient \
+    testcontainer_pass \
     ps ax
   
   # show connections
   docker exec \
     -i \
-    testclient \
+    testcontainer_pass \
     netstat -an
   
   set +x
@@ -81,7 +69,7 @@ test_function_sourced_ok() {
    assertContains \
      "ensure the function can be sourced via healthchecks.sh" \
      "$(declare -F)" \
-     "declare -f check_tcp4_connection_established"
+     "declare -f check_tcp4_socket_listening"
 
 }
 
@@ -93,7 +81,7 @@ test_pass() {
   exec 3>&1
 
   # Run command.  stderr is captured.
-  output_pass=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6379 2>&1 1>&3)
+  output_pass=$(docker exec -i testcontainer_pass /workdir/checks/check_tcp4_socket_listening.sh 0.0.0.0 80 2>&1 1>&3)
 
   # Close FD #3.
   exec 3>&-
@@ -102,10 +90,10 @@ test_pass() {
   
   # connection that does exist
   assertContains \
-    'connection that does exist' \
+    'listening on 0.0.0.0:80' \
     "$output_pass" \
     'PASS'
-  
+
 }
 
 test_fail() {
@@ -116,7 +104,7 @@ test_fail() {
   exec 3>&1
 
   # Run command.  stderr is captured.
-  output_fail=$(docker exec -i testclient /workdir/checks/check_tcp4_connection_established.sh ANY ANY 172.28.3.10 6380 2>&1 1>&3)
+  output_fail=$(docker exec -i testcontainer_fail /workdir/checks/check_tcp4_socket_listening.sh 0.0.0.0 80 2>&1 1>&3)
   
   # Close FD #3.
   exec 3>&-
@@ -125,7 +113,7 @@ test_fail() {
 
   # connection that doesn't exist
   assertContains \
-    "connection that doesn't exist" \
+    "not listening on 0.0.0.0:80" \
     "$output_fail" \
     'FAIL'
     
@@ -134,9 +122,8 @@ test_fail() {
 oneTimeTearDown() {
   set -x
   # clean up
-  docker kill testclient
-  docker kill testserver
-  docker network rm testnet
+  docker kill testcontainer_fail
+  docker kill testcontainer_pass
   docker image rm testimage
   set +x
 }

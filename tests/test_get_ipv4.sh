@@ -239,6 +239,7 @@ oneTimeTearDown() {
   docker kill testclient_s6
   docker kill testserver
   docker network rm testnet
+  docker image rm testimage
   set +x
 }
 

@@ -3,8 +3,13 @@
 function get_ipv4() {
   # $1 = IP(v4) address or hostname
   # -----
+  
+  # source common regexes
+    SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    . "$SCRIPTPATH/../common/common_regex_patterns.sh"
+  
   if [[ -n "$1" ]]; then
-    if IP=$(echo "$1" | grep -P '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$' 2> /dev/null); then
+    if IP=$(echo "$1" | grep -P "^${regex_any_ipv4}\$" 2> /dev/null); then
       :
       if [[ -n "$VERBOSE_LOGGING" ]]; then
         >&2 echo "DEBUG: Already IP"
@@ -24,7 +29,7 @@ function get_ipv4() {
       
       # Attempt to resolve $1 into an IP address with busybox nslookup
       if which busybox > /dev/null 2>&1; then
-        if IP=$(busybox nslookup "$1." | grep -A999 -m1 'Non-authoritative answer:' | grep 'Address:' | cut -d ' ' -f 2 | grep -P '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$' 2> /dev/null); then
+        if IP=$(busybox nslookup "$1." | grep -A999 -m1 'Non-authoritative answer:' | grep 'Address:' | cut -d ' ' -f 2 | grep -P "^${regex_any_ipv4}\$" 2> /dev/null); then
           if [[ -n "$VERBOSE_LOGGING" ]]; then
             >&2 echo "DEBUG: Got IP via busybox nslookup"
           fi

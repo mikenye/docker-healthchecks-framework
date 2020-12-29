@@ -4,7 +4,7 @@
 
 ### `check_tcp4_connection_established`
 
-Checks that an IPv4 TCP connection to/from the container is established.
+Checks that an IPv4 TCP connection is established.
 
 **Dependencies:**
 
@@ -14,12 +14,12 @@ Checks that an IPv4 TCP connection to/from the container is established.
 **Syntax:**
 
 ```shell
-check_tcp4_connection_established local_ip local_port local_ip local_port
+check_tcp4_connection_established local_ip local_port remote_ip remote_port
 ```
 
 **Arguments:**
 
-* `local_ip`: The IPv4 address of the local side of the connection,or `ANY`.
+* `local_ip`: The IPv4 address of the local side of the connection, or `ANY`.
 * `local_port`: The TCP port of the local side of the connection, or `ANY`.
 * `remote_ip`: The IPv4 address of the remote side of the connection, or `ANY`.
 * `remote_port`: The TCP port of the remote side of the connection, or `ANY`.
@@ -46,6 +46,42 @@ Combined usage with `get_ipv4` to resolve a linked container name (in the exampl
 
 ```shell
 check_tcp4_connection_established ANY ANY $(get_ipv4 mariadb) 3306
+```
+
+### `check_tcp4_socket_listening`
+
+Checks that an IPv4 TCP socket is listening.
+
+**Dependencies:**
+
+* `netstat`
+  * Provided by the `net-tools` package on Debian/Ubuntu
+
+**Syntax:**
+
+```shell
+check_tcp4_socket_listening local_ip local_port
+```
+
+**Arguments:**
+
+* `local_ip`: The local IPv4 address the service is listening on, or `ANY`.
+* `local_port`: The local TCP port the service is listening on, or `ANY`.
+
+**Example 1:**
+
+Checks to ensure a web server is always listening on `0.0.0.0:80`:
+
+```shell
+check_tcp4_socket_listening 0.0.0.0 80
+```
+
+**Example 2:**
+
+Check to ensure a database server is always listening on `127.0.0.1:3306`:
+
+```shell
+check_tcp4_socket_listening 127.0.0.1 3306
 ```
 
 ## Helpers
