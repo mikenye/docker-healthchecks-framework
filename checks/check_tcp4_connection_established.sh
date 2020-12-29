@@ -7,7 +7,9 @@ function check_tcp4_connection_established() {
     # $4 = remote port
     # ——
     
-    . ../common/common_regex_patterns.sh
+    # source common regexes
+    SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+    . "$SCRIPTPATH/../common/common_regex_patterns.sh"
     
     # Check local IP input
     if [[ "$1" == "ANY" ]]; then
