@@ -14,7 +14,7 @@ function check_tcp4_connection_established() {
     # Check local IP input
     if [[ "$1" == "ANY" ]]; then
       : # pass
-    elif ! echo "$1" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
+    elif ! echo "$1" | grep -P "${regex_any_ipv4}" > /dev/null 2>&1; then
       >&2 echo "Expected local IPv4 address or 'ANY'. Given '$1': FAIL"
       return 1
     fi
@@ -30,7 +30,7 @@ function check_tcp4_connection_established() {
     # Check remote IP input
     if [[ "$3" == "ANY" ]]; then
       : # pass
-    elif ! echo "$3" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
+    elif ! echo "$3" | grep -P "${regex_any_ipv4}" > /dev/null 2>&1; then
       >&2 echo "Expected remote IPv4 address or 'ANY'. Given '$3': FAIL"
       return 1
     fi

@@ -7,12 +7,12 @@ function check_tcp4_socket_listening() {
     
     # source common regexes
     SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    . "$SCRIPTPATH/../common/common_regex_patterns.sh"
+    . "${SCRIPTPATH}/../common/common_regex_patterns.sh"
     
     # Check local IP input
     if [[ "$1" == "ANY" ]]; then
       : # pass
-    elif ! echo "$1" | grep -P "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" > /dev/null 2>&1; then
+    elif ! echo "$1" | grep -P "${regex_any_ipv4}" > /dev/null 2>&1; then
       >&2 echo "Expected local IPv4 address or 'ANY'. Given '$1': FAIL"
       return 1
     fi
