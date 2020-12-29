@@ -16,6 +16,7 @@ jobs:
       matrix:
         test-script:
           - tests/test_check_tcp4_connection_established.sh
+          - tests/test_check_tcp4_socket_listening.sh
           - tests/test_get_ipv4.sh
     
     steps:

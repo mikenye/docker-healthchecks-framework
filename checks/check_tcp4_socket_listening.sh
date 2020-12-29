@@ -5,8 +5,7 @@ function check_tcp4_socket_listening() {
     # $2 = local port
     # ----
     
-    regex_any_ip_v4or6='(([a-fA-F0-9]{0,4}\:?){2,8}|(\d{1,3}\.?){4})'
-    regex_any_port='\d{1,5}'
+    . ../common/common_regex_patterns.sh
     
     # Check local IP input
     if [[ "$1" == "ANY" ]]; then
@@ -26,7 +25,7 @@ function check_tcp4_socket_listening() {
     
     # Prepare the part of the regex pattern that has the local IP
     if [[ "$1" == "ANY" ]]; then
-      regex_local_ip="${regex_any_ip_v4or6}"
+      regex_local_ip="${regex_any_ipv4}"
     else
       # regex_src_ip=$(echo "$1" | sed 's/\./\\./g')
       regex_local_ip=${1//\./\\.}
@@ -40,7 +39,7 @@ function check_tcp4_socket_listening() {
     fi
     
     # Prepare the remainder of the regex including the IP and port
-    regex="^tcp6?\s+\d+\s+\d+\s+${regex_src_ip}:${regex_src_port}\s+${regex_any_ip_v4or6}:${regex_any_port}\s+LISTEN$"
+    regex="^tcp\s+\d+\s+\d+\s+${regex_src_ip}:${regex_src_port}\s+${regex_any_ip_v4or6}:${regex_any_port}\s+LISTEN$"
     
     # Check to see if the connection is established
     if netstat -an | grep -P "$regex" > /dev/null 2>&1; then
