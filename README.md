@@ -4,7 +4,7 @@
 
 ### `check_tcp4_connection_established`
 
-Checks that an IPv4 TCP connection to/from the container is established.
+Checks that an IPv4 TCP connection is established.
 
 **Dependencies:**
 
@@ -14,7 +14,7 @@ Checks that an IPv4 TCP connection to/from the container is established.
 **Syntax:**
 
 ```shell
-check_tcp4_connection_established local_ip local_port local_ip local_port
+check_tcp4_connection_established local_ip local_port remote_ip remote_port
 ```
 
 **Arguments:**
