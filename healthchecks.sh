@@ -4,5 +4,5 @@
 SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # source functions
-. "${SCRIPTPATH}/checks/*.sh"
-. "${SCRIPTPATH}/helpers/*.sh"
+. "${SCRIPTPATH}/checks/"*.sh
+. "${SCRIPTPATH}/helpers/"*.sh
