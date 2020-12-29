@@ -7,6 +7,8 @@ function check_tcp4_connection_established() {
     # $4 = remote port
     # ——
     
+    . ../common/common_regex_patterns.sh
+    
     # Check local IP input
     if [[ "$1" == "ANY" ]]; then
       : # pass
@@ -41,7 +43,7 @@ function check_tcp4_connection_established() {
     
     # Prepare the part of the regex pattern that has the local IP
     if [[ "$1" == "ANY" ]]; then
-      regex_local_ip="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+      regex_local_ip="${regex_any_ipv4}"
     else
       # escape periods in regex so they match periods
       regex_local_ip=${1//\./\\.}
@@ -49,14 +51,14 @@ function check_tcp4_connection_established() {
     
     # Prepare the part of the regex pattern that has the local port
     if [[ "$2" == "ANY" ]]; then
-      regex_local_port="\d{1,5}"
+      regex_local_port="${regex_any_port}"
     else
       regex_local_port="$2"
     fi
     
     # Prepare the part of the regex pattern that has the remote IP
     if [[ "$3" == "ANY" ]]; then
-      regex_remote_ip="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+      regex_remote_ip="${regex_any_ipv4}"
     else
       # escape periods in regex so they match periods
       regex_remote_ip=${3//\./\\.}
@@ -64,7 +66,7 @@ function check_tcp4_connection_established() {
     
     # Prepare the part of the regex pattern that has the remote port
     if [[ "$4" == "ANY" ]]; then
-      regex_remote_port="\d{1,5}"
+      regex_remote_port="${regex_any_port}"
     else
       regex_remote_port="$4"
     fi
