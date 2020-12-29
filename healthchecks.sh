@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# get path where this script is located
+SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # source functions
-. ./checks/*.sh
-. ./helpers/*.sh
+. "${SCRIPTPATH}/checks/*.sh"
+. "${SCRIPTPATH}/helpers/*.sh"
