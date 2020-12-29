@@ -8,7 +8,7 @@ function check_tcp4_connection_established() {
     # ——
     
     # source common regexes
-    SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+    SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     . "$SCRIPTPATH/../common/common_regex_patterns.sh"
     
     # Check local IP input

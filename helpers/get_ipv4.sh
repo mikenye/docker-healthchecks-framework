@@ -5,7 +5,7 @@ function get_ipv4() {
   # -----
   
   # source common regexes
-    SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+    SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     . "$SCRIPTPATH/../common/common_regex_patterns.sh"
   
   if [[ -n "$1" ]]; then
