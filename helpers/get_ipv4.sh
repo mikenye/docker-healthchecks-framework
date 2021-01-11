@@ -13,6 +13,7 @@ function get_ipv4() {
       :
       if [[ -n "$VERBOSE_LOGGING" ]]; then
         >&2 echo "DEBUG: Already IP"
+        echo "$1"
       fi
     else
       
