@@ -27,6 +27,9 @@ function check_s6_service_deathcount() {
       S6_SERVICES=( "$1" )
     fi
 
+    # Remove s6-services from list of services checked
+    S6_SERVICES=( ${S6_SERVICES[@]/s6-fdholderd/} )
+
     # For each service...
     for service in "${S6_SERVICES[@]}"; do
 
