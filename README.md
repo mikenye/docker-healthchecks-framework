@@ -89,7 +89,7 @@ check_tcp4_connection_established local_ip local_port remote_ip remote_port
 Checks to ensure a connection to an external MariaDB database server is always established:
 
 ```shell
-check_tcp4_connection_established ANY ANY dbhost.internal.domain 3306
+check_tcp4_connection_established ANY ANY 1.2.3.4 3306
 ```
 
 **Example 2:**
@@ -135,18 +135,10 @@ check_udp4_connection_established local_ip local_port remote_ip remote_port
 Checks to ensure a connection to an external RTP server is always established:
 
 ```shell
-check_udp4_connection_established ANY ANY rtphost.internal.domain 5234
+check_udp4_connection_established ANY ANY 1.2.3.4 5234
 ```
 
 **Example 2:**
-
-Check to ensure at least one inbound RTP connecton is always established:
-
-```shell
-check_udp4_connection_established ANY 5234 ANY ANY
-```
-
-**Example 3:**
 
 Combined usage with `get_ipv4` to resolve a linked container name (in the example below, the container is named "rtmpserver") to an IP:
 
