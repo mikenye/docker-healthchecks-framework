@@ -10,6 +10,7 @@ This set of scripts provide a framework for creating simple and reliable healthc
     * [`check_udp4_connection_established`](#check_udp4_connection_established)
     * [`check_tcp4_socket_listening`](#check_tcp4_socket_listening)
     * [`check_udp4_socket_listening`](#check_udp4_socket_listening)
+    * [`check_s6_service_abnormal_death_tally```](#check_s6_service_abnormal_death_tally)
   * [Helpers](#helpers)
     * [`get_ipv4`](#get_ipv4)
 
@@ -208,6 +209,34 @@ Checks to ensure an RTP server is always listening on `0.0.0.0:5234`:
 
 ```shell
 check_udp4_socket_listening 0.0.0.0 5234
+```
+
+### `check_s6_service_abnormal_death_tally```
+
+Checks for abnormal service deaths for [s6-overlay](https://github.com/just-containers/s6-overlay) services.
+
+**Dependencies:**
+
+* `s6-overlay`
+  * See <https://github.com/just-containers/s6-overlay>
+
+**Syntax:**
+
+```shell
+check_s6_service_abnormal_death_tally service_name service_root
+```
+
+**Arguments:**
+
+* `service_name`: The name of the s6 service, or `ALL`
+* `service_root`: If the root directory is something other than `/run/s6/services`, otherwise leave unset
+
+**Example 1:**
+
+Check for abnormal death count for all services in a container:
+
+```shell
+check_s6_service_abnormal_death_tally ALL
 ```
 
 ## Helpers
