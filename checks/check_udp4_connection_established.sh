@@ -78,10 +78,10 @@ function check_udp4_connection_established() {
     
     # Check to see if the connection is established
     if netstat -an | grep -P "$regex" > /dev/null 2>&1; then
-      >&2 echo "Connection between $1:$2 and $3:$4 established: PASS"
+      >&2 echo "UDP4 connection between $1:$2 and $3:$4 established: PASS"
       true
     else
-      >&2 echo "Connection between $1:$2 and $3:$4 not established: FAIL"
+      >&2 echo "UDP4 connection between $1:$2 and $3:$4 not established: FAIL"
       false
     fi
 }

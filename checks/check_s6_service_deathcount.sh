@@ -32,18 +32,18 @@ function check_s6_service_deathcount() {
 
         # Get number of non-zero service exits
         returnvalue=$(s6-svdt \
-                        -s "/run/s6/services/$service" | \
+                        -s "$S6_SERVICE_PATH/$service" | \
                         grep -cv 'exitcode 0')
 
         # Reset service death counts
-        s6-svdt-clear "/run/s6/services/$service"
+        s6-svdt-clear "$S6_SERVICE_PATH/$service"
 
         # Log healthy/unhealthy and exit abnormally if unhealthy
         if [[ "$returnvalue" -eq "0" ]]; then
-            >&2 echo "abnormal death count for service $service is $returnvalue: HEALTHY"
+            >&2 echo "Abnormal death count for s6 service $service is $returnvalue: HEALTHY"
             true
         else
-            >&2 echo "abnormal death count for service $service is $returnvalue: UNHEALTHY"
+            >&2 echo "Abnormal death count for s6 service $service is $returnvalue: UNHEALTHY"
             false
         fi
     done

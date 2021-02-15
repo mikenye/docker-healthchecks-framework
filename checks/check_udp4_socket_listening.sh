@@ -45,10 +45,10 @@ function check_udp4_socket_listening() {
     
     # Check to see if the connection is established
     if netstat -an | grep -P "$regex" > /dev/null 2>&1; then
-      >&2 echo "Listening on $1:$2 (udp): PASS"
+      >&2 echo "UDP4 listening on $1:$2 (udp): PASS"
       true
     else
-      >&2 echo "Not listening on $1:$2 (udp): FAIL"
+      >&2 echo "UDP4 not listening on $1:$2 (udp): FAIL"
       false
     fi
 }
