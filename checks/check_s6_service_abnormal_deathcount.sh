@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function check_s6_service_deathcount() {
+function check_s6_service_abnormal_deathcount() {
     # $1 = service name
     # $2 = path to service dir
     # ----
@@ -55,5 +55,5 @@ function check_s6_service_deathcount() {
 
 # If the script is called directly, run the function
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  check_s6_service_deathcount "$1" "$2"
+  check_s6_service_abnormal_deathcount "$1" "$2"
 fi
