@@ -43,10 +43,10 @@ function check_s6_service_abnormal_death_tally() {
 
         # Log healthy/unhealthy and exit abnormally if unhealthy
         if [[ "$returnvalue" -eq "0" ]]; then
-            >&2 echo "Abnormal death count for s6 service $service is $returnvalue: HEALTHY"
+            >&2 echo "Abnormal death count for s6 service $service is $returnvalue: PASS"
             true
         else
-            >&2 echo "Abnormal death count for s6 service $service is $returnvalue: UNHEALTHY"
+            >&2 echo "Abnormal death count for s6 service $service is $returnvalue: FAIL"
             false
         fi
     done
