@@ -61,10 +61,10 @@ function check_tcp4_socket_listening_for_pid() {
     
     # Check to see if the connection is established
     if netstat -anp | grep -P "$regex" > /dev/null 2>&1; then
-      >&2 echo "TCP4 listening on $1:$2 (tcp) for PID $5: PASS"
+      >&2 echo "TCP4 listening on $1:$2 (tcp) for PID $3: PASS"
       true
     else
-      >&2 echo "TCP4 not listening on $1:$2 (tcp) for PID $5: FAIL"
+      >&2 echo "TCP4 not listening on $1:$2 (tcp) for PID $3: FAIL"
       false
     fi
 }
