@@ -8,8 +8,8 @@ This set of scripts provide a framework for creating simple and reliable healthc
   * [Checks](#checks)
     * [`check_tcp4_connection_established_for_pid`](#check_tcp4_connection_established_for_pid)
     * [`check_tcp4_connection_established`](#check_tcp4_connection_established)
+    * [`check_udp4_connection_established_pid`](#check_udp4_connection_established_pid)
     * [`check_udp4_connection_established`](#check_udp4_connection_established)
-    * [`check_udp4_connection_established`](#check_udp4_connection_established-1)
     * [`check_tcp4_socket_listening_for_pid`](#check_tcp4_socket_listening_for_pid)
     * [`check_tcp4_socket_listening`](#check_tcp4_socket_listening)
     * [`check_udp4_socket_listening`](#check_udp4_socket_listening)
@@ -78,7 +78,7 @@ Checks that an IPv4 TCP connection is established for a specific PID.
 **Syntax:**
 
 ```shell
-check_tcp4_connection_established local_ip local_port remote_ip remote_port pid
+check_tcp4_connection_established_pid local_ip local_port remote_ip remote_port pid
 ```
 
 **Arguments:**
@@ -143,7 +143,7 @@ Combined usage with `get_ipv4` to resolve a linked container name (in the exampl
 check_tcp4_connection_established ANY ANY $(get_ipv4 mariadb) 3306
 ```
 
-### `check_udp4_connection_established`
+### `check_udp4_connection_established_pid`
 
 Checks that an IPv4 UDP connection is established for a specific PID.
 
@@ -155,7 +155,7 @@ Checks that an IPv4 UDP connection is established for a specific PID.
 **Syntax:**
 
 ```shell
-check_udp4_connection_established local_ip local_port remote_ip remote_port pid
+check_udp4_connection_established_pid local_ip local_port remote_ip remote_port pid
 ```
 
 **Arguments:**
@@ -171,7 +171,7 @@ check_udp4_connection_established local_ip local_port remote_ip remote_port pid
 Checks to ensure a connection to an external RTP server is always established for a specific PID:
 
 ```shell
-check_udp4_connection_established ANY ANY 1.2.3.4 5234 "$process_pid"
+check_udp4_connection_established_pid ANY ANY 1.2.3.4 5234 "$process_pid"
 ```
 
 ### `check_udp4_connection_established`
@@ -224,7 +224,7 @@ Checks that an IPv4 TCP socket is listening for a specific PID.
 **Syntax:**
 
 ```shell
-check_tcp4_socket_listening local_ip local_port pid
+check_tcp4_socket_listening_pid local_ip local_port pid
 ```
 
 **Arguments:**
@@ -238,7 +238,7 @@ check_tcp4_socket_listening local_ip local_port pid
 Checks to ensure a web server is always listening on `0.0.0.0:80`:
 
 ```shell
-check_tcp4_socket_listening 0.0.0.0 80 "$process_pid"
+check_tcp4_socket_listening_pid 0.0.0.0 80 "$process_pid"
 ```
 
 ### `check_tcp4_socket_listening`
