@@ -6,8 +6,11 @@ This set of scripts provide a framework for creating simple and reliable healthc
   * [Adding to your image](#adding-to-your-image)
   * [Adding to your healthcheck script](#adding-to-your-healthcheck-script)
   * [Checks](#checks)
+    * [`check_tcp4_connection_established_for_pid`](#check_tcp4_connection_established_for_pid)
     * [`check_tcp4_connection_established`](#check_tcp4_connection_established)
     * [`check_udp4_connection_established`](#check_udp4_connection_established)
+    * [`check_udp4_connection_established`](#check_udp4_connection_established-1)
+    * [`check_tcp4_socket_listening_for_pid`](#check_tcp4_socket_listening_for_pid)
     * [`check_tcp4_socket_listening`](#check_tcp4_socket_listening)
     * [`check_udp4_socket_listening`](#check_udp4_socket_listening)
     * [`check_s6_service_abnormal_death_tally`](#check_s6_service_abnormal_death_tally)
@@ -63,6 +66,37 @@ You can then set this script in your `HEALTHCHECK` argument in your project's `D
 
 ## Checks
 
+### `check_tcp4_connection_established_for_pid`
+
+Checks that an IPv4 TCP connection is established for a specific PID.
+
+**Dependencies:**
+
+* `netstat`
+  * Provided by the `net-tools` package on Debian/Ubuntu
+
+**Syntax:**
+
+```shell
+check_tcp4_connection_established local_ip local_port remote_ip remote_port pid
+```
+
+**Arguments:**
+
+* `local_ip`: The IPv4 address of the local side of the connection, or `ANY`.
+* `local_port`: The TCP port of the local side of the connection, or `ANY`.
+* `remote_ip`: The IPv4 address of the remote side of the connection, or `ANY`.
+* `remote_port`: The TCP port of the remote side of the connection, or `ANY`.
+* `pid`: The PID of the process, or `ANY`.
+
+**Example 1:**
+
+Checks to ensure a connection to an external MariaDB database server is always established from a specific PID:
+
+```shell
+check_tcp4_connection_established ANY ANY 1.2.3.4 3306 "$pid_of_process"
+```
+
 ### `check_tcp4_connection_established`
 
 Checks that an IPv4 TCP connection is established.
@@ -111,6 +145,37 @@ check_tcp4_connection_established ANY ANY $(get_ipv4 mariadb) 3306
 
 ### `check_udp4_connection_established`
 
+Checks that an IPv4 UDP connection is established for a specific PID.
+
+**Dependencies:**
+
+* `netstat`
+  * Provided by the `net-tools` package on Debian/Ubuntu
+
+**Syntax:**
+
+```shell
+check_udp4_connection_established local_ip local_port remote_ip remote_port pid
+```
+
+**Arguments:**
+
+* `local_ip`: The IPv4 address of the local side of the connection, or `ANY`.
+* `local_port`: The UDP port of the local side of the connection, or `ANY`.
+* `remote_ip`: The IPv4 address of the remote side of the connection, or `ANY`.
+* `remote_port`: The UDP port of the remote side of the connection, or `ANY`.
+* `pid`: The PID of the process, or `ANY`.
+
+**Example 1:**
+
+Checks to ensure a connection to an external RTP server is always established for a specific PID:
+
+```shell
+check_udp4_connection_established ANY ANY 1.2.3.4 5234 "$process_pid"
+```
+
+### `check_udp4_connection_established`
+
 Checks that an IPv4 UDP connection is established.
 
 **Dependencies:**
@@ -145,6 +210,35 @@ Combined usage with `get_ipv4` to resolve a linked container name (in the exampl
 
 ```shell
 check_udp4_connection_established ANY ANY $(get_ipv4 rtmpserver) 5234
+```
+
+### `check_tcp4_socket_listening_for_pid`
+
+Checks that an IPv4 TCP socket is listening for a specific PID.
+
+**Dependencies:**
+
+* `netstat`
+  * Provided by the `net-tools` package on Debian/Ubuntu
+
+**Syntax:**
+
+```shell
+check_tcp4_socket_listening local_ip local_port pid
+```
+
+**Arguments:**
+
+* `local_ip`: The local IPv4 address the service is listening on, or `ANY`.
+* `local_port`: The local TCP port the service is listening on, or `ANY`.
+* `pid`: The PID of the process, or `ANY`.
+
+**Example 1:**
+
+Checks to ensure a web server is always listening on `0.0.0.0:80`:
+
+```shell
+check_tcp4_socket_listening 0.0.0.0 80 "$process_pid"
 ```
 
 ### `check_tcp4_socket_listening`
