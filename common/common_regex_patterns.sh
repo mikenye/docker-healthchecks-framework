@@ -7,3 +7,7 @@ regex_any_ip_v4or6="(${regex_any_ipv6}|${regex_any_ipv4})"
 
 # common TCP/UDP port matches
 regex_any_port='\d{1,5}'
+
+# netstat matches
+# netstat -p "PID/Program Name" column
+regex_netstat_connection_any_process='\d+\/\S+|\-'
