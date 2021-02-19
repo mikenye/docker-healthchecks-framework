@@ -94,7 +94,7 @@ check_tcp4_connection_established_pid local_ip local_port remote_ip remote_port 
 Checks to ensure a connection to an external MariaDB database server is always established from a specific PID:
 
 ```shell
-check_tcp4_connection_established ANY ANY 1.2.3.4 3306 "$pid_of_process"
+check_tcp4_connection_established_pid ANY ANY 1.2.3.4 3306 "$pid_of_process"
 ```
 
 ### `check_tcp4_connection_established`
